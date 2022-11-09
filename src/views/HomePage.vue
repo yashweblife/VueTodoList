@@ -2,28 +2,28 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title>Vue Todo</ion-title>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-    
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
-    </ion-content>
+      <ion-fab vertical="bottom" horizontal="end">
+        <ion-fab-button>
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <ion-list>
+        <ItemVue v-for="item in list" :key="item.id" :data="item" @delete-item="handleDelete"/>
+      </ion-list>
+    </ion-content>      
   </ion-page>
 </template>
 
 <script lang="ts">
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import ItemVue from '@/components/Item.vue';
+import {generateId, ItemInterface} from '../utils'
 
 export default defineComponent({
   name: 'HomePage',
@@ -32,12 +32,47 @@ export default defineComponent({
     IonHeader,
     IonPage,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    ItemVue
+  },
+  data:()=>{
+    const list:ItemInterface[] = [
+      {
+        title:"Hello World",
+        info:"test",
+        id:generateId(),
+        marked:false
+      },
+      {
+        title:"World",
+        info:"test",
+        id:generateId(),
+        marked:false
+      },
+      {
+        title:"Hello",
+        info:"test",
+        id:generateId(),
+        marked:false
+      },
+    ]
+    return({
+      list
+    })
+  },
+  methods:{
+    handleDelete(a:string){
+      let x = this.list.filter((item:ItemInterface)=>item.id!=a)
+      this.list = x
+    },
+    addItem(){
+      this.list.push()
+    }
   }
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #container {
   text-align: center;
   
@@ -65,4 +100,5 @@ export default defineComponent({
 #container a {
   text-decoration: none;
 }
+
 </style>
